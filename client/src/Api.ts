@@ -1,5 +1,7 @@
 export type SearchRecordsRequest = {
   textSearch?: string;
+  limit: number;
+  offset: number;
 };
 
 export type ProcurementRecord = {
@@ -15,6 +17,7 @@ export type ProcurementRecord = {
 
 export type SearchRecordsResponse = {
   records: ProcurementRecord[];
+  endOfResults: boolean;
 };
 
 class Api {

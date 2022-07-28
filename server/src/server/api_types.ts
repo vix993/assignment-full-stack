@@ -1,5 +1,7 @@
 export type RecordSearchRequest = {
   textSearch?: string;
+  offset: number;
+  limit: number;
 };
 
 export type BuyerDto = {
@@ -17,4 +19,5 @@ export type ProcurementRecordDto = {
 
 export type RecordSearchResponse = {
   records: ProcurementRecordDto[];
+  endOfResults: boolean; // this is true when there are no more results to search
 };
