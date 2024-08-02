@@ -1,4 +1,5 @@
 import express, { request } from "express";
+import cors from "cors";
 
 import { Sequelize } from "sequelize-typescript";
 import {
@@ -27,6 +28,8 @@ const sequelize = new Sequelize({
 sequelize.addModels([Buyer, ProcurementRecord]);
 
 const app = express();
+
+app.use(cors());
 
 app.set("port", process.env.PORT || 3000);
 app.set("views", "./views");
