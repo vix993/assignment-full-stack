@@ -1,12 +1,10 @@
 import { Select } from "antd";
-import { CSSProperties, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
+import { BuyerSelectFilterProps, SearchInputProps } from "./Types";
 import useBuyerOptions from "./hooks/useBuyerOptions";
 
-const SearchInput = (props: {
-  placeholder: string;
-  style: CSSProperties;
-  onChange: (newBuyerId: string | undefined) => void;
-}) => {
+// TODO: abstract as modular component
+const SearchInput = (props: SearchInputProps) => {
   const [value, setValue] = useState<string>();
   const {
     refetch: getBuyers,
@@ -54,11 +52,7 @@ const SearchInput = (props: {
   );
 };
 
-const BuyerSelectFilter = ({
-  onChange,
-}: {
-  onChange: (newBuyerId: string | undefined) => void;
-}) => (
+const BuyerSelectFilter = ({ onChange }: BuyerSelectFilterProps) => (
   <SearchInput
     placeholder="Search buyers..."
     style={{ flex: 1 }}

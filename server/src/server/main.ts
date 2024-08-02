@@ -181,6 +181,7 @@ async function serializeProcurementRecords(
  * This endpoint implements basic way to paginate through the search results.
  * It returns a `endOfResults` flag which is true when there are no more records to fetch.
  */
+// TODO: extract to own routes file
 app.post("/api/records", async (req, res) => {
   const requestPayload = req.body as RecordSearchRequest;
 
@@ -214,6 +215,7 @@ app.post("/api/records", async (req, res) => {
   res.json(response);
 });
 
+// TODO: extract to own routes file
 app.get("/api/buyers", async (req, res) => {
   const query = req.query as any as BuyerSearchQuery;
 
@@ -227,9 +229,6 @@ app.get("/api/buyers", async (req, res) => {
   const buyers = await searchBuyers({ textSearch: query.q }, offset, limit + 1);
 
   const response: BuyerSearchResponse = {
-    // buyers: await serializeBuyers(
-    //   buyers.slice(0, limit) // only return the number of records requested
-    // ),
     buyers: buyers
       .slice(0, limit)
       .map((buyer) => ({ id: buyer.id, name: buyer.name })),

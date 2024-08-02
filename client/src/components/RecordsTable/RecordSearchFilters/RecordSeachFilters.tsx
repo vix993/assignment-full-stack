@@ -1,18 +1,9 @@
 import { Input } from "antd";
 import { FormEvent, useCallback } from "react";
-import BuyerSelectFilter from "./BuyerSelectFilter";
+import BuyerSelectFilter from "../BuyerSelectFilter/BuyerSelectFilter";
+import { RecordSearchFiltersProps } from "./Types";
 
-export type SearchFilters = {
-  query: string;
-  buyerId?: string;
-};
-
-type Props = {
-  filters: SearchFilters;
-  onChange: (newFilters: SearchFilters) => void;
-};
-
-function RecordSearchFilters(props: Props) {
+function RecordSearchFilters(props: RecordSearchFiltersProps) {
   const { filters, onChange } = props;
 
   const handleQueryChange = useCallback(
