@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import { ColumnType } from "antd/lib/table";
-import React, { useMemo } from "react";
+import React from "react";
 import { ProcurementRecord } from "./Api";
 import ProcurementRecordPreviewModal from "./ProcurementRecordPreview";
 
@@ -41,8 +41,18 @@ function RecordsTable(props: Props) {
       },
       {
         title: "Value",
-        render: (record: ProcurementRecord) =>
-          `${record.currency} ${record.value}`,
+        render: (record: ProcurementRecord) => {
+          // format contract value
+          // TODO: use currency attribute
+          // limitation is legacy values in currency
+          const value =
+            !record.currency && !record.value
+              ? "Not specified"
+              : `${new Intl.NumberFormat("en-GB").format(record.value)}${
+                  !!record.currency ? ` ${record.currency}` : ""
+                }`;
+          return value;
+        },
       },
       {
         title: "Stage",
@@ -65,7 +75,9 @@ function RecordsTable(props: Props) {
                 record.awardDate ? ` on ${record.awardDate}` : ""
               }`;
             },
-            TenderIntent() { return "" },
+            TenderIntent() {
+              return "";
+            },
           };
           return record.stage ? renderStage[record.stage]?.() ?? "" : "";
         },
@@ -74,7 +86,12 @@ function RecordsTable(props: Props) {
   }, []);
   return (
     <>
-      <Table rowKey={({ id }) => id} columns={columns} dataSource={records} pagination={false} />
+      <Table
+        rowKey={({ id }) => id}
+        columns={columns}
+        dataSource={records}
+        pagination={false}
+      />
       <ProcurementRecordPreviewModal
         record={previewedRecord}
         onClose={() => setPreviewedRecord(undefined)}
