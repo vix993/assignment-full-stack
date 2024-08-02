@@ -44,6 +44,13 @@ const SearchInput = (props: SearchInputProps) => {
       notFoundContent={null}
       onClear={() => handleChange(undefined)}
       allowClear
+      // TODO: implement load more
+      // dropdownRender={(dropdown) => (
+      //   <>
+      //     {dropdown}
+      //     <>Load more here</>
+      //   </>
+      // )}
       options={(buyerData || []).map((d) => ({
         value: d.value,
         label: d.text,
