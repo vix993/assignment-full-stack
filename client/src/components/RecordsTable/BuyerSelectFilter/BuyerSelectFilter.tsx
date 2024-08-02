@@ -13,6 +13,7 @@ const SearchInput = (props: SearchInputProps) => {
   } = useBuyerOptions({ q: "", limit: 10, initialOffset: 0 });
 
   // refetch when input changes
+  // TODO: debounce this function
   const handleSearch = useCallback(
     (newValue: string) => {
       getBuyers(newValue);
