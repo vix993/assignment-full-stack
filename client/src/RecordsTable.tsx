@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import { ColumnType } from "antd/lib/table";
-import React from "react";
+import React, { useMemo } from "react";
 import { ProcurementRecord } from "./Api";
 import ProcurementRecordPreviewModal from "./ProcurementRecordPreview";
 
@@ -10,6 +10,10 @@ type Props = {
 
 function RecordsTable(props: Props) {
   const { records } = props;
+  const recordsWithKey = useMemo(
+    () => records?.map((record) => ({ ...record, key: record?.id })),
+    [records]
+  );
   const [previewedRecord, setPreviewedRecord] = React.useState<
     ProcurementRecord | undefined
   >();
@@ -43,7 +47,7 @@ function RecordsTable(props: Props) {
   }, []);
   return (
     <>
-      <Table columns={columns} dataSource={records} pagination={false} />
+      <Table columns={columns} dataSource={recordsWithKey} pagination={false} />
       <ProcurementRecordPreviewModal
         record={previewedRecord}
         onClose={() => setPreviewedRecord(undefined)}

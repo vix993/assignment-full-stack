@@ -43,7 +43,10 @@ function RecordSearchPage() {
         setRecords(response.records);
       } else {
         // append new results to the existing records
-        setRecords((oldRecords) => [...oldRecords, ...response.records]);
+        setRecords((oldRecords) => [
+          ...(oldRecords ?? []),
+          ...response.records,
+        ]);
       }
       setReachedEndOfSearch(response.endOfResults);
     })();
