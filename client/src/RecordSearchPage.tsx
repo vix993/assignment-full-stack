@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import React from "react";
+import { useCallback, useEffect, useState } from "react";
 import Api, { ProcurementRecord } from "./Api";
 import RecordSearchFilters, { SearchFilters } from "./RecordSearchFilters";
 import RecordsTable from "./RecordsTable";
@@ -19,22 +19,21 @@ import RecordsTable from "./RecordsTable";
 const PAGE_SIZE = 10;
 
 function RecordSearchPage() {
-  const [page, setPage] = React.useState<number>(1);
-  const [searchFilters, setSearchFilters] = React.useState<SearchFilters>({
+  const [page, setPage] = useState<number>(1);
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
     query: "",
   });
 
-  const [records, setRecords] = React.useState<
-    ProcurementRecord[] | undefined
-  >();
+  const [records, setRecords] = useState<ProcurementRecord[] | undefined>();
 
-  const [reachedEndOfSearch, setReachedEndOfSearch] = React.useState(false);
+  const [reachedEndOfSearch, setReachedEndOfSearch] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     void (async () => {
       const api = new Api();
       const response = await api.searchRecords({
         textSearch: searchFilters.query,
+        buyerId: searchFilters.buyerId,
         limit: PAGE_SIZE,
         offset: PAGE_SIZE * (page - 1),
       });
@@ -52,12 +51,12 @@ function RecordSearchPage() {
     })();
   }, [searchFilters, page]);
 
-  const handleChangeFilters = React.useCallback((newFilters: SearchFilters) => {
+  const handleChangeFilters = useCallback((newFilters: SearchFilters) => {
     setSearchFilters(newFilters);
     setPage(1); // reset pagination state
   }, []);
 
-  const handleLoadMore = React.useCallback(() => {
+  const handleLoadMore = useCallback(() => {
     setPage((page) => page + 1);
   }, []);
 
