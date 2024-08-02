@@ -14,6 +14,7 @@ const SearchInput = (props: {
     isLoading: loadingBuyers,
   } = useBuyerOptions({ q: "", limit: 10, initialOffset: 0 });
 
+  // refetch when input changes
   const handleSearch = useCallback(
     (newValue: string) => {
       getBuyers(newValue);
@@ -21,10 +22,14 @@ const SearchInput = (props: {
     [getBuyers]
   );
 
-  const handleChange = useCallback((newValue: string | undefined) => {
-    setValue(newValue);
-    props?.onChange(newValue);
-  }, []);
+  // TODO: debounce this function
+  const handleChange = useCallback(
+    (newValue: string | undefined) => {
+      setValue(newValue);
+      props?.onChange(newValue);
+    },
+    [props?.onChange]
+  );
 
   return (
     <Select

@@ -51,10 +51,13 @@ function RecordSearchPage() {
     })();
   }, [searchFilters, page]);
 
-  const handleChangeFilters = useCallback((newFilters: SearchFilters) => {
-    setSearchFilters(newFilters);
-    setPage(1); // reset pagination state
-  }, []);
+  const handleChangeFilters = useCallback(
+    (newFilters: SearchFilters) => {
+      setSearchFilters(newFilters);
+      setPage(1); // reset pagination state
+    },
+    [searchFilters]
+  );
 
   const handleLoadMore = useCallback(() => {
     setPage((page) => page + 1);
