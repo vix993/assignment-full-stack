@@ -1,8 +1,10 @@
-import express, { request } from "express";
 import cors from "cors";
+import express from "express";
 
 import { Sequelize } from "sequelize-typescript";
 import {
+  BuyerSearchQuery,
+  BuyerSearchResponse,
   ProcurementRecordDto,
   RecordSearchRequest,
   RecordSearchResponse,
@@ -47,6 +49,9 @@ type RecordSearchFilters = {
   textSearch?: string;
 };
 
+type BuyerSearchFilters = {
+  textSearch?: string;
+};
 /**
  * Queries the database for procurement records according to the search filters.
  */
@@ -72,6 +77,40 @@ async function searchRecords(
       "SELECT * FROM procurement_records LIMIT :limit OFFSET :offset",
       {
         model: ProcurementRecord,
+        replacements: {
+          offset: offset,
+          limit: limit,
+        },
+      }
+    );
+  }
+}
+
+/**
+ * Queries the database for buyers according to the search filters.
+ */
+async function searchBuyers(
+  { textSearch }: BuyerSearchFilters,
+  offset: number,
+  limit: number
+): Promise<Buyer[]> {
+  if (textSearch) {
+    return await sequelize.query(
+      "SELECT * FROM buyers WHERE name LIKE :textSearch LIMIT :limit OFFSET :offset",
+      {
+        model: Buyer, // by setting this sequelize will return a list of Buyer objects
+        replacements: {
+          textSearch: `%${textSearch}%`,
+          offset: offset,
+          limit: limit,
+        },
+      }
+    );
+  } else {
+    return await sequelize.query(
+      "SELECT * FROM buyers LIMIT :limit OFFSET :offset",
+      {
+        model: Buyer,
         replacements: {
           offset: offset,
           limit: limit,
@@ -173,6 +212,31 @@ app.post("/api/records", async (req, res) => {
       records.slice(0, limit) // only return the number of records requested
     ),
     endOfResults: records.length <= limit, // in this case we've reached the end of results
+  };
+
+  res.json(response);
+});
+
+app.get("/api/buyers", async (req, res) => {
+  const query = req.query as any as BuyerSearchQuery;
+
+  const { limit = 10, offset = 0 } = query;
+
+  if (limit === 0 || limit > 100) {
+    res.status(400).json({ error: "Limit must be between 1 and 100." });
+    return;
+  }
+
+  const buyers = await searchBuyers({ textSearch: query.q }, offset, limit + 1);
+
+  const response: BuyerSearchResponse = {
+    // buyers: await serializeBuyers(
+    //   buyers.slice(0, limit) // only return the number of records requested
+    // ),
+    buyers: buyers
+      .slice(0, limit)
+      .map((buyer) => ({ id: buyer.id, name: buyer.name })),
+    endOfResults: buyers.length <= limit, // in this case we've reached the end of results
   };
 
   res.json(response);
