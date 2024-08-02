@@ -10,10 +10,6 @@ type Props = {
 
 function RecordsTable(props: Props) {
   const { records } = props;
-  const recordsWithKey = useMemo(
-    () => records?.map((record) => ({ ...record, key: record?.id })),
-    [records]
-  );
   const [previewedRecord, setPreviewedRecord] = React.useState<
     ProcurementRecord | undefined
   >();
@@ -43,11 +39,42 @@ function RecordsTable(props: Props) {
         title: "Buyer name",
         render: (record: ProcurementRecord) => record.buyer.name,
       },
+      {
+        title: "Value",
+        render: (record: ProcurementRecord) =>
+          `${record.currency} ${record.value}`,
+      },
+      {
+        title: "Stage",
+        render: (record: ProcurementRecord) => {
+          // Handle logic for different procurement stage
+          // TODO: potential for abstraction
+          const renderStage = {
+            TENDER() {
+              const isOpen =
+                record.closeDate === null ||
+                new Date(record.closeDate!) > new Date();
+              if (isOpen) {
+                return `Open until ${record.closeDate}`;
+              } else {
+                return `Closed`;
+              }
+            },
+            CONTRACT() {
+              return `Awarded${
+                record.awardDate ? ` on ${record.awardDate}` : ""
+              }`;
+            },
+            TenderIntent() { return "" },
+          };
+          return record.stage ? renderStage[record.stage]?.() ?? "" : "";
+        },
+      },
     ];
   }, []);
   return (
     <>
-      <Table columns={columns} dataSource={recordsWithKey} pagination={false} />
+      <Table rowKey={({ id }) => id} columns={columns} dataSource={records} pagination={false} />
       <ProcurementRecordPreviewModal
         record={previewedRecord}
         onClose={() => setPreviewedRecord(undefined)}
