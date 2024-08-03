@@ -1,22 +1,9 @@
 ## Project Structure
 
-Below is high level example of how the project could be structured initially.
+I have quickly refactored the codebase using the repository pattern.
 
-Adding the routes dir allows us to organise our repositories.
+With more time I would wrap the services in interfaces and inject dependencies such as sequelize and repositories.
 
-The sequelize dir allows us to instantiate sequelize for injection.
+I might organise the models into domains.
 
-The modules folder is an example of how we can organise seperate services within the app.
-
-The main.ts file would then be responsible for managing dependency injection of these components.
-
-- src/
-  - db/
-  - routes/
-  - sequelize/
-  - modules/
-    - [service_name]/
-      - business_service/
-      - data_service/
-  - tests/
-  - main.ts
+I would also leverage sequelize ORM functionality.
