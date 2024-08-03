@@ -8,8 +8,7 @@ type Props = {
   records: ProcurementRecord[];
 };
 
-function RecordsTable(props: Props) {
-  const { records } = props;
+function RecordsTable({ records }: Props) {
   const [previewedRecord, setPreviewedRecord] = React.useState<
     ProcurementRecord | undefined
   >();

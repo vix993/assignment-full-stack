@@ -3,7 +3,9 @@ import { useCallback, useState } from "react";
 import { BuyerSelectFilterProps, SearchInputProps } from "./Types";
 import useBuyerOptions from "./hooks/useBuyerOptions";
 
+// A Search input that takes an on change
 // TODO: abstract as modular component
+// type of onChange could be generic
 const SearchInput = (props: SearchInputProps) => {
   const [value, setValue] = useState<string>();
   const {
@@ -44,6 +46,7 @@ const SearchInput = (props: SearchInputProps) => {
       onChange={handleChange}
       notFoundContent={null}
       onClear={() => handleChange(undefined)}
+      // TODO: clear functionality could be more accessible
       allowClear
       // TODO: implement load more
       // dropdownRender={(dropdown) => (

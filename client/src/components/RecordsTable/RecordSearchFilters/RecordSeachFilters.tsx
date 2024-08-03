@@ -3,9 +3,7 @@ import { FormEvent, useCallback } from "react";
 import BuyerSelectFilter from "../BuyerSelectFilter/BuyerSelectFilter";
 import { RecordSearchFiltersProps } from "./Types";
 
-function RecordSearchFilters(props: RecordSearchFiltersProps) {
-  const { filters, onChange } = props;
-
+function RecordSearchFilters({ filters, onChange }: RecordSearchFiltersProps) {
   const handleQueryChange = useCallback(
     (e: FormEvent<HTMLInputElement>) => {
       onChange({
