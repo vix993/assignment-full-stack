@@ -1,8 +1,9 @@
 import { Button } from "antd";
-import React from "react";
-import Api, { ProcurementRecord } from "./Api";
-import RecordSearchFilters, { SearchFilters } from "./RecordSearchFilters";
-import RecordsTable from "./RecordsTable";
+import { useCallback, useEffect, useState } from "react";
+import Api, { ProcurementRecord } from "../Api";
+import RecordSearchFilters from "../components/RecordsTable/RecordSearchFilters/RecordSeachFilters";
+import { SearchFilters } from "../components/RecordsTable/RecordSearchFilters/Types";
+import RecordsTable from "../components/RecordsTable/RecordsTable";
 
 /**
  * This component implements very basic pagination.
@@ -19,22 +20,21 @@ import RecordsTable from "./RecordsTable";
 const PAGE_SIZE = 10;
 
 function RecordSearchPage() {
-  const [page, setPage] = React.useState<number>(1);
-  const [searchFilters, setSearchFilters] = React.useState<SearchFilters>({
+  const [page, setPage] = useState<number>(1);
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
     query: "",
   });
 
-  const [records, setRecords] = React.useState<
-    ProcurementRecord[] | undefined
-  >();
+  const [records, setRecords] = useState<ProcurementRecord[] | undefined>();
 
-  const [reachedEndOfSearch, setReachedEndOfSearch] = React.useState(false);
+  const [reachedEndOfSearch, setReachedEndOfSearch] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     void (async () => {
       const api = new Api();
       const response = await api.searchRecords({
         textSearch: searchFilters.query,
+        buyerId: searchFilters.buyerId,
         limit: PAGE_SIZE,
         offset: PAGE_SIZE * (page - 1),
       });
@@ -43,18 +43,24 @@ function RecordSearchPage() {
         setRecords(response.records);
       } else {
         // append new results to the existing records
-        setRecords((oldRecords) => [...oldRecords, ...response.records]);
+        setRecords((oldRecords) => [
+          ...(oldRecords ?? []),
+          ...response.records,
+        ]);
       }
       setReachedEndOfSearch(response.endOfResults);
     })();
   }, [searchFilters, page]);
 
-  const handleChangeFilters = React.useCallback((newFilters: SearchFilters) => {
-    setSearchFilters(newFilters);
-    setPage(1); // reset pagination state
-  }, []);
+  const handleChangeFilters = useCallback(
+    (newFilters: SearchFilters) => {
+      setSearchFilters(newFilters);
+      setPage(1); // reset pagination state
+    },
+    [searchFilters]
+  );
 
-  const handleLoadMore = React.useCallback(() => {
+  const handleLoadMore = useCallback(() => {
     setPage((page) => page + 1);
   }, []);
 

@@ -1,14 +1,12 @@
 import { Modal } from "antd";
-import React from "react";
-import { ProcurementRecord } from "./Api";
+import { ProcurementRecord } from "../../../Api";
 
 type Props = {
   record?: ProcurementRecord;
   onClose: () => void;
 };
 
-function ProcurementRecordPreviewModal(props: Props) {
-  const { record, onClose } = props;
+function ProcurementRecordPreviewModal({ record, onClose }: Props) {
   if (!record) return null;
   return (
     <Modal
