@@ -6,4 +6,4 @@ With more time I would wrap the services in interfaces and inject dependencies s
 
 I might organise the models into domains.
 
-I would also leverage sequelize ORM functionality.
+I would also leverage sequelize ORM functionality (e.g. findAllAndCount for pagination).
