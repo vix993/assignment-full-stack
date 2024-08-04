@@ -9,7 +9,7 @@ const router = Router();
  * This endpoint implements basic way to paginate through the search results.
  * It returns a `endOfResults` flag which is true when there are no more records to fetch.
  */
-// TODO: extract to own routes file
+// TODO: extract business logic into service
 router.post("/", async (req, res) => {
   const requestPayload = req.body as RecordSearchRequest;
 
