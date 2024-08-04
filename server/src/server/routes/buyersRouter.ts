@@ -4,6 +4,7 @@ import buyersRepository from "../repositories/buyersRepository";
 
 const router = Router();
 
+// TODO: extract business logic into service
 router.get("/", async (req, res) => {
   const query = req.query as any as BuyerSearchQuery;
 
